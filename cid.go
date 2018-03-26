@@ -39,23 +39,25 @@ func main() {
 	// log.Println(ipfs_cid)
 	fmt.Println(ipfs_cid)
 
-	// fileAdder
-	fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
-	if err != nil {
-		return
-	}
+	/*
+		// fileAdder
+		fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
+		if err != nil {
+			return
+		}
 
-	md := dagtest.Mock()
-	mr, err := mfs.NewRoot(ctx, md, ft.EmptyDirNode(), nil)
-	if err != nil {
-		return
-	}
-	fileAdder.SetMfsRoot(mr)
+		md := dagtest.Mock()
+		mr, err := mfs.NewRoot(ctx, md, ft.EmptyDirNode(), nil)
+		if err != nil {
+			return
+		}
+		fileAdder.SetMfsRoot(mr)
 
-	root, err := fileAdder.Myadd(bytes.NewReader(data))
-	if err != nil {
-		return
-	}
-	// log.Println(root.Cid().String())
-	fmt.Println(root.Cid().String())
+		root, err := fileAdder.Myadd(bytes.NewReader(data))
+		if err != nil {
+			return
+		}
+		// log.Println(root.Cid().String())
+		fmt.Println(root.Cid().String())
+	*/
 }
