@@ -36,7 +36,7 @@ func main() {
 		return
 	}
 	// log.Println(ipfs_cid)
-	fmt.Println(ipfs_cid)
+	fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
 
 	/*
 		// fileAdder
