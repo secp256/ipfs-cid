@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"context"
-	"log"
+	"fmt"
+	// "log"
+	"os"
 
 	core "github.com/ipfs/go-ipfs/core"
 	coreunix "github.com/ipfs/go-ipfs/core/coreunix"
@@ -14,23 +16,28 @@ import (
 )
 
 func main() {
+	if len(os.Args) == 1 {
+		return
+	}
+	data := []byte(os.Args[1])
+
 	// ipfsnode
 	ctx := context.TODO()
 	node, err := core.NewNode(ctx, &core.BuildCfg{})
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
 		return
 	}
 	defer node.Close()
 
-	data := []byte("hello")
 	// coreunix.Add
 	ipfs_cid, err := coreunix.Add(node, bytes.NewReader(data))
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
 		return
 	}
-	log.Println(ipfs_cid)
+	// log.Println(ipfs_cid)
+	fmt.Println(ipfs_cid)
 
 	// fileAdder
 	fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
@@ -49,7 +56,6 @@ func main() {
 	if err != nil {
 		return
 	}
-	log.Println(root.Cid().String())
-
-	log.Println("finished")
+	// log.Println(root.Cid().String())
+	fmt.Println(root.Cid().String())
 }
