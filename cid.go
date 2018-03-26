@@ -9,9 +9,9 @@ import (
 
 	core "github.com/ipfs/go-ipfs/core"
 	coreunix "github.com/ipfs/go-ipfs/core/coreunix"
-	// dagtest "github.com/ipfs/go-ipfs/merkledag/test"
-	// mfs "github.com/ipfs/go-ipfs/mfs"
-	// ft "github.com/ipfs/go-ipfs/unixfs"
+	dagtest "github.com/ipfs/go-ipfs/merkledag/test"
+	mfs "github.com/ipfs/go-ipfs/mfs"
+	ft "github.com/ipfs/go-ipfs/unixfs"
 )
 
 func main() {
@@ -29,34 +29,24 @@ func main() {
 	}
 	defer node.Close()
 
-	// coreunix.Add
-	ipfs_cid, err := coreunix.Add(node, bytes.NewReader(data))
+	// fileAdder
+	fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
 	if err != nil {
-		// log.Fatal(err)
 		return
 	}
-	// log.Println(ipfs_cid)
+
+	md := dagtest.Mock()
+	mr, err := mfs.NewRoot(ctx, md, ft.EmptyDirNode(), nil)
+	if err != nil {
+		return
+	}
+	fileAdder.SetMfsRoot(mr)
+
+	root, err := fileAdder.Myadd(bytes.NewReader(data))
+	if err != nil {
+		return
+	}
+	// log.Println(root.Cid().String())
+	ipfs_cid := root.Cid().String()
 	fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
-
-	/*
-		// fileAdder
-		fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
-		if err != nil {
-			return
-		}
-
-		md := dagtest.Mock()
-		mr, err := mfs.NewRoot(ctx, md, ft.EmptyDirNode(), nil)
-		if err != nil {
-			return
-		}
-		fileAdder.SetMfsRoot(mr)
-
-		root, err := fileAdder.Myadd(bytes.NewReader(data))
-		if err != nil {
-			return
-		}
-		// log.Println(root.Cid().String())
-		fmt.Println(root.Cid().String())
-	*/
 }
