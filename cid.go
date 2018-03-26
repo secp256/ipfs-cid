@@ -22,12 +22,14 @@ func main() {
 
 	// ipfsnode
 	ctx := context.TODO()
-	node, err := core.NewNode(ctx, &core.BuildCfg{})
+	node, err := core.NewNode(ctx, &core.BuildCfg{
+		NilRepo: true,
+	})
 	if err != nil {
 		os.Exit(2)
 		return
 	}
-	defer node.Close()
+	// defer node.Close()
 
 	// fileAdder
 	fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
