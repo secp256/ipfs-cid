@@ -9,10 +9,9 @@ import (
 
 	core "github.com/ipfs/go-ipfs/core"
 	coreunix "github.com/ipfs/go-ipfs/core/coreunix"
-
-	dagtest "github.com/ipfs/go-ipfs/merkledag/test"
-	mfs "github.com/ipfs/go-ipfs/mfs"
-	ft "github.com/ipfs/go-ipfs/unixfs"
+	// dagtest "github.com/ipfs/go-ipfs/merkledag/test"
+	// mfs "github.com/ipfs/go-ipfs/mfs"
+	// ft "github.com/ipfs/go-ipfs/unixfs"
 )
 
 func main() {
