@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"context"
+	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	core "github.com/ipfs/go-ipfs/core"
@@ -14,11 +16,18 @@ import (
 )
 
 func main() {
-	if len(os.Args) == 1 {
+	var fname, raw_string string
+	flag.StringVar(&fname, "f", "", "file to be added")
+	flag.StringVar(&raw_string, "s", "", "string to be added")
+	flag.Parse()
+
+	// fmt.Println("fname:", fname)
+	// fmt.Println("raw_string:", raw_string)
+
+	if raw_string == "" && fname == "" {
 		os.Exit(1)
 		return
 	}
-	data := []byte(os.Args[1])
 
 	// ipfsnode
 	ctx := context.TODO()
@@ -46,12 +55,31 @@ func main() {
 	}
 	fileAdder.SetMfsRoot(mr)
 
-	root, err := fileAdder.Myadd(bytes.NewReader(data))
-	if err != nil {
-		os.Exit(5)
-		return
-	}
+	if len(raw_string) > 0 {
+		data := []byte(raw_string)
+		// fmt.Println("data:", data)
 
-	ipfs_cid := root.Cid().String()
-	fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
+		root, err := fileAdder.Myadd(bytes.NewReader(data))
+
+		if err != nil {
+			os.Exit(5)
+			return
+		}
+
+		ipfs_cid := root.Cid().String()
+		fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
+	} else if len(fname) > 0 {
+		data, _ := ioutil.ReadFile(fname)
+		// fmt.Println("data:", data)
+
+		root, err := fileAdder.Myadd(bytes.NewReader(data))
+
+		if err != nil {
+			os.Exit(5)
+			return
+		}
+
+		ipfs_cid := root.Cid().String()
+		fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
+	}
 }
