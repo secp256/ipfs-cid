@@ -72,7 +72,8 @@ func main() {
 	}
 
 	if len(raw_string) > 0 {
-		data := str_to_bytes(raw_string)
+		// data := str_to_bytes(raw_string)
+		data := []byte(raw_string)
 		// fmt.Println("data:", data)
 		get_cid(data)
 	} else if len(fname) > 0 {
