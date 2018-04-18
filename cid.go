@@ -51,6 +51,12 @@ func get_cid(data []byte) {
 	fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
 }
 
+func str_to_bytes(s string) []byte {
+	x := (*[2]uintptr)(unsafe.Pointer(&s))
+	h := [3]uintptr{x[0], x[1], x[1]}
+	return *(*[]byte)(unsafe.Pointer(&h))
+}
+
 func main() {
 	var fname, raw_string string
 	flag.StringVar(&fname, "f", "", "file to be added")
@@ -66,7 +72,7 @@ func main() {
 	}
 
 	if len(raw_string) > 0 {
-		data := []byte(raw_string)
+		data := str_to_bytes(raw_string)
 		// fmt.Println("data:", data)
 		get_cid(data)
 	} else if len(fname) > 0 {
