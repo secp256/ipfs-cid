@@ -33,22 +33,14 @@ func get_cid(data []byte) {
 		return
 	}
 
-	params := ihelper.DagBuilderParams{
-		// Dagserv:   node.DAG,
-		RawLeaves: false, // adder.RawLeaves
-		Maxlinks:  ihelper.DefaultLinksPerBlock,
-		NoCopy:    false, // adder.NoCopy,
-		// Prefix:    adder.Prefix,
-	}
-
+	params := ihelper.DagBuilderParams{}
 	root, err := balanced.Layout(params.New(chnk))
 	if err != nil {
 		os.Exit(4)
 		return
 	}
 
-	ipfs_cid := root.Cid().String()
-	fmt.Printf("{\"cid\":\"%s\"}", ipfs_cid)
+	fmt.Printf("{\"cid\":\"%s\"}", root.Cid().String())
 }
 
 func str_to_bytes(s string) []byte {
@@ -63,22 +55,18 @@ func main() {
 	flag.StringVar(&raw_string, "s", "", "string to be added")
 	flag.Parse()
 
-	// fmt.Println("fname:", fname)
-	// fmt.Println("raw_string:", raw_string)
-
 	if raw_string == "" && fname == "" {
-		os.Exit(1)
+		get_cid(str_to_bytes(""))
 		return
 	}
 
 	if len(raw_string) > 0 {
-		// data := str_to_bytes(raw_string)
-		data := []byte(raw_string)
-		// fmt.Println("data:", data)
+		data := str_to_bytes(raw_string)
+		// data := []byte(raw_string)
 		get_cid(data)
 	} else if len(fname) > 0 {
 		data, _ := ioutil.ReadFile(fname)
-		// fmt.Println("data:", data)
+		// fmt.Println(len(data))
 		get_cid(data)
 	}
 }
