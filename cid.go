@@ -2,11 +2,11 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"unsafe"
 
 	// core "github.com/ipfs/go-ipfs/core"
 	balanced "github.com/ipfs/go-ipfs/importer/balanced"
