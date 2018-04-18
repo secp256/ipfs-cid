@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	core "github.com/ipfs/go-ipfs/core"
+	// core "github.com/ipfs/go-ipfs/core"
 	balanced "github.com/ipfs/go-ipfs/importer/balanced"
 	ihelper "github.com/ipfs/go-ipfs/importer/helpers"
 	chunker "gx/ipfs/QmWo8jYc19ppG7YoTsrr2kEtLRbARTJho5oNXFTR6B7Peq/go-ipfs-chunker"
@@ -17,14 +17,14 @@ import (
 func get_cid(data []byte) {
 
 	// ipfsnode
-	ctx := context.TODO()
-	node, err := core.NewNode(ctx, &core.BuildCfg{
-		NilRepo: true,
-	})
-	if err != nil {
-		os.Exit(2)
-		return
-	}
+	// ctx := context.TODO()
+	// node, err := core.NewNode(ctx, &core.BuildCfg{
+	// 	NilRepo: true,
+	// })
+	// if err != nil {
+	// 	os.Exit(2)
+	// 	return
+	// }
 	// defer node.Close()
 
 	chnk, err := chunker.FromString(bytes.NewReader(data), "")
@@ -34,7 +34,7 @@ func get_cid(data []byte) {
 	}
 
 	params := ihelper.DagBuilderParams{
-		Dagserv:   node.DAG,
+		// Dagserv:   node.DAG,
 		RawLeaves: false, // adder.RawLeaves
 		Maxlinks:  ihelper.DefaultLinksPerBlock,
 		NoCopy:    false, // adder.NoCopy,
