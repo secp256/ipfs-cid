@@ -9,6 +9,8 @@ import (
 	"os"
 
 	core "github.com/ipfs/go-ipfs/core"
+	balanced "github.com/ipfs/go-ipfs/importer/balanced"
+	ihelper "github.com/ipfs/go-ipfs/importer/helpers"
 	chunker "gx/ipfs/QmWo8jYc19ppG7YoTsrr2kEtLRbARTJho5oNXFTR6B7Peq/go-ipfs-chunker"
 )
 
