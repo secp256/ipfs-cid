@@ -9,10 +9,7 @@ import (
 	"os"
 
 	core "github.com/ipfs/go-ipfs/core"
-	coreunix "github.com/ipfs/go-ipfs/core/coreunix"
-	dagtest "github.com/ipfs/go-ipfs/merkledag/test"
-	mfs "github.com/ipfs/go-ipfs/mfs"
-	ft "github.com/ipfs/go-ipfs/unixfs"
+	chunker "gx/ipfs/QmWo8jYc19ppG7YoTsrr2kEtLRbARTJho5oNXFTR6B7Peq/go-ipfs-chunker"
 )
 
 func get_cid(data []byte) {
@@ -28,24 +25,23 @@ func get_cid(data []byte) {
 	}
 	// defer node.Close()
 
-	// fileAdder
-	fileAdder, err := coreunix.NewAdder(ctx, node.Pinning, node.Blockstore, node.DAG)
+	chnk, err := chunker.FromString(bytes.NewReader(data), "")
 	if err != nil {
 		os.Exit(3)
 		return
 	}
 
-	md := dagtest.Mock()
-	mr, err := mfs.NewRoot(ctx, md, ft.EmptyDirNode(), nil)
+	params := ihelper.DagBuilderParams{
+		Dagserv:   node.DAG,
+		RawLeaves: false, // adder.RawLeaves
+		Maxlinks:  ihelper.DefaultLinksPerBlock,
+		NoCopy:    false, // adder.NoCopy,
+		// Prefix:    adder.Prefix,
+	}
+
+	root, err := balanced.Layout(params.New(chnk))
 	if err != nil {
 		os.Exit(4)
-		return
-	}
-	fileAdder.SetMfsRoot(mr)
-
-	root, err := fileAdder.Myadd(bytes.NewReader(data))
-	if err != nil {
-		os.Exit(5)
 		return
 	}
 
