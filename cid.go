@@ -8,32 +8,26 @@ import (
 	"os"
 	"unsafe"
 
-	// core "github.com/ipfs/go-ipfs/core"
 	balanced "github.com/ipfs/go-ipfs/importer/balanced"
 	ihelper "github.com/ipfs/go-ipfs/importer/helpers"
+	dstest "github.com/ipfs/go-ipfs/merkledag/test"
 	chunker "gx/ipfs/QmWo8jYc19ppG7YoTsrr2kEtLRbARTJho5oNXFTR6B7Peq/go-ipfs-chunker"
 )
 
 func get_cid(data []byte) {
-
-	// ipfsnode
-	// ctx := context.TODO()
-	// node, err := core.NewNode(ctx, &core.BuildCfg{
-	// 	NilRepo: true,
-	// })
-	// if err != nil {
-	// 	os.Exit(2)
-	// 	return
-	// }
-	// defer node.Close()
-
 	chnk, err := chunker.FromString(bytes.NewReader(data), "")
 	if err != nil {
 		os.Exit(3)
 		return
 	}
 
-	params := ihelper.DagBuilderParams{}
+	ds := dstest.Mock()
+	params := ihelper.DagBuilderParams{
+		Dagserv:   ds,
+		RawLeaves: false,
+		Maxlinks:  ihelper.DefaultLinksPerBlock,
+		NoCopy:    false,
+	}
 	root, err := balanced.Layout(params.New(chnk))
 	if err != nil {
 		os.Exit(4)
@@ -66,7 +60,6 @@ func main() {
 		get_cid(data)
 	} else if len(fname) > 0 {
 		data, _ := ioutil.ReadFile(fname)
-		// fmt.Println(len(data))
 		get_cid(data)
 	}
 }
